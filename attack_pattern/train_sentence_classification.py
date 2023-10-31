@@ -3,7 +3,7 @@ import os
 import random
 
 import numpy as np
-import sklearn
+from sklearn.metrics import *
 import torch
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
@@ -184,12 +184,12 @@ class Classification:
         print('Val loss: {}, Val Acc: {}'.format(val_loss, val_acc))
         print('Test loss: {}, Test Acc: {}'.format(test_loss, test_acc))
 
-        pr, re, f1, _ = sklearn.metrics.precision_recall_fscore_support(y_true, y_pred, average='binary')
+        pr, re, f1, _ = precision_recall_fscore_support(y_true, y_pred, average='binary')
         print('Test Pr: {}, Test Re: {}, Test F1: {}'.format(pr, re, f1))
         with open(self.log_path, 'a', newline='') as out:
             writer = csv.writer(out)
             writer.writerow(['test(acc/pr/re/f1)', test_acc, pr, re, f1])
-        cm = sklearn.metrics.confusion_matrix(y_true, y_pred)
+        cm = confusion_matrix(y_true, y_pred)
 
         # write final results
         result_file = os.path.join(self.args.save_path, self.args.task + '_result.txt')
